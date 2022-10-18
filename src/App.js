@@ -1,15 +1,32 @@
 import "./App.css";
 import { useState, useEffect } from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+import { Reorder } from "framer-motion";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
 
 function App() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const [questionList, setQuestionList] = useState([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [targetId, setTargetId] = useState(0);
 
   const options = ["May Select", "Must Select"];
 
   // initial render to set question list
+  const fetchQuestionList = () => {
+    return JSON.parse(localStorage.getItem("questionList"));
+  };
+
   useEffect(() => {
     setSelectedOption(options[0]);
     const list = fetchQuestionList();
@@ -27,6 +44,33 @@ function App() {
     localStorage.setItem("questionList", JSON.stringify(questionList));
   }, [stringifiedArr]);
 
+  // handle dialog before delete data
+  const handleOpenDialog = (id) => {
+    console.log("dialog open " + id);
+    setTargetId(id);
+    setIsDialogOpen(true);
+  };
+
+  const AlertDeleteBox = () => {
+    return (
+      <Dialog
+        open={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        aria-labelledby="delete-dialog"
+      >
+        <DialogContent>
+          <DialogContentText>Are you sure want to delete?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+
+          <Button onClick={() => handleDelete(targetId)}>Delete</Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
+  // CRUD handler
   const handleSave = (e) => {
     e.preventDefault();
     const questionElem = {
@@ -47,67 +91,107 @@ function App() {
     e.preventDefault();
   };
 
-  const handleDelete = (e, id) => {
-    e.preventDefault();
+  const handleDelete = (id) => {
     const listClone = [...questionList];
     const filteredList = listClone.filter((obj) => obj.id !== id);
     setQuestionList(filteredList);
-  };
-
-  const fetchQuestionList = () => {
-    return JSON.parse(localStorage.getItem("questionList"));
+    setIsDialogOpen(false);
   };
 
   return (
-    <div className="container">
+    <Stack spacing={2} style={{ padding: "4rem 8rem" }}>
+      <AlertDeleteBox />
+
       <span>Question list</span>
-      {questionList?.map((q, i) => (
-        <div
-          key={q.id}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            border: "white solid 1px",
-          }}
+
+      {questionList.length ? (
+        <Reorder.Group
+          axis="y"
+          values={questionList}
+          onReorder={setQuestionList}
         >
-          <span>q: {q.question}</span>
-          <span>a: {q.answer}</span>
-          <span>o: {q.selectedOption}</span>
+          {questionList.map((q) => (
+            <Reorder.Item key={q.id} value={q}>
+              <Box
+                sx={{
+                  bgcolor: "background.paper",
+                  boxShadow: 1,
+                  borderRadius: 2,
+                  p: 2,
+                  minWidth: 300,
+                }}
+              >
+                <Stack spacing={2}>
+                  <span style={{ color: "gray" }}>Question</span>
+                  <span>{q.question}</span>
+                  <span style={{ color: "gray" }}>Respondent option</span>
+                  <span>{q.selectedOption}</span>
+                  <span style={{ color: "gray" }}>Answer</span>
+                  <span>{q.answer}</span>
+                  <Button
+                    onClick={(e) => handleEdit(e, q.id)}
+                    size="small"
+                    variant="contained"
+                    color="warning"
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    onClick={(e) => handleOpenDialog(q.id)}
+                    size="small"
+                    variant="contained"
+                    color="error"
+                  >
+                    Delete
+                  </Button>
+                </Stack>
+              </Box>
+            </Reorder.Item>
+          ))}
+        </Reorder.Group>
+      ) : (
+        <span style={{ color: "gray" }}>Question list is empty</span>
+      )}
 
-          <button onClick={(e) => handleEdit(e, q.id)}>Edit</button>
-          <button onClick={(e) => handleDelete(e, q.id)}>Delete</button>
-        </div>
-      ))}
       <span>Input question</span>
-      <textarea
+
+      <TextField
+        id="question"
+        label="Question"
         value={question}
-        placeholder="Input question..."
         onChange={(e) => setQuestion(e.target.value)}
-      ></textarea>
+        multiline
+        rows={4}
+        variant="filled"
+      />
 
-      <span>{question}</span>
-
-      <select
+      <span>Respondent option</span>
+      <Select
         value={selectedOption}
         onChange={(e) => setSelectedOption(e.target.value)}
       >
         {options.map((opt, i) => (
-          <option value={opt} key={i}>
+          <MenuItem value={opt} key={i}>
             {opt}
-          </option>
+          </MenuItem>
         ))}
-      </select>
-      <textarea
+      </Select>
+
+      <span>Input answer</span>
+      <TextField
+        id="answer"
+        label="Answer"
         value={answer}
-        placeholder="Input answer..."
         onChange={(e) => setAnswer(e.target.value)}
-      ></textarea>
+        multiline
+        rows={4}
+        variant="filled"
+      />
 
-      <span>selected option: {selectedOption}</span>
-      <span>{answer}</span>
-
-      <button onClick={(e) => handleSave(e)}>Save</button>
-    </div>
+      <Button onClick={(e) => handleSave(e)} variant="contained">
+        Save
+      </Button>
+    </Stack>
   );
 }
 
