@@ -6,13 +6,12 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
-import { Reorder } from "framer-motion";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
 
 import CardList from "./components/CardList";
+import AlertDelete from "./components/AlertDelete";
 
 function App() {
   const [question, setQuestion] = useState("");
@@ -103,6 +102,13 @@ function App() {
   return (
     <Stack spacing={2} style={{ padding: "4rem 8rem" }}>
       <AlertDeleteBox />
+
+      {/* TODO fix alert delete */}
+      {/* <AlertDelete
+        isDialogOpen={isDialogOpen}
+        onDialogOpen={setIsDialogOpen}
+        onDelete={handleDelete(targetId)}
+      /> */}
 
       <span>Question list</span>
 

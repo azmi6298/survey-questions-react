@@ -29,7 +29,7 @@ export default function CardComponent({ cardData, onEdit, onDelete }) {
           Edit
         </Button>
         <Button
-          onClick={(e) => onDelete(cardData.id)}
+          onClick={onDelete(cardData.id)}
           size="small"
           variant="contained"
           color="error"
