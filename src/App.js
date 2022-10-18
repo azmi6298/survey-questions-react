@@ -12,6 +12,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 
+import CardList from "./components/CardList";
+
 function App() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
@@ -87,8 +89,8 @@ function App() {
     setSelectedOption(options[0]);
   };
 
-  const handleEdit = (e, id) => {
-    e.preventDefault();
+  const handleEdit = (id) => {
+    console.log("edit");
   };
 
   const handleDelete = (id) => {
@@ -105,50 +107,12 @@ function App() {
       <span>Question list</span>
 
       {questionList.length ? (
-        <Reorder.Group
-          axis="y"
-          values={questionList}
+        <CardList
+          listData={questionList}
           onReorder={setQuestionList}
-        >
-          {questionList.map((q) => (
-            <Reorder.Item key={q.id} value={q}>
-              <Box
-                sx={{
-                  bgcolor: "background.paper",
-                  boxShadow: 1,
-                  borderRadius: 2,
-                  p: 2,
-                  minWidth: 300,
-                }}
-              >
-                <Stack spacing={2}>
-                  <span style={{ color: "gray" }}>Question</span>
-                  <span>{q.question}</span>
-                  <span style={{ color: "gray" }}>Respondent option</span>
-                  <span>{q.selectedOption}</span>
-                  <span style={{ color: "gray" }}>Answer</span>
-                  <span>{q.answer}</span>
-                  <Button
-                    onClick={(e) => handleEdit(e, q.id)}
-                    size="small"
-                    variant="contained"
-                    color="warning"
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    onClick={(e) => handleOpenDialog(q.id)}
-                    size="small"
-                    variant="contained"
-                    color="error"
-                  >
-                    Delete
-                  </Button>
-                </Stack>
-              </Box>
-            </Reorder.Item>
-          ))}
-        </Reorder.Group>
+          onEdit={handleEdit}
+          onDelete={handleOpenDialog}
+        />
       ) : (
         <span style={{ color: "gray" }}>Question list is empty</span>
       )}
