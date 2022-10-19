@@ -1,23 +1,15 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 
 import CardList from "./components/CardList";
 import AlertDelete from "./components/AlertDelete";
+import QuestionForm from "./components/QuestionForm";
 
 function App() {
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
   const [questionList, setQuestionList] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [targetId, setTargetId] = useState(null);
-
-  const options = ["May Select", "Must Select"];
 
   // initial render to set question list
   const fetchQuestionList = () => {
@@ -25,7 +17,7 @@ function App() {
   };
 
   useEffect(() => {
-    setSelectedOption(options[0]);
+    // setSelectedOption(options[0]);
     const list = fetchQuestionList();
 
     return () => {
@@ -42,8 +34,7 @@ function App() {
   }, [stringifiedArr]);
 
   // handle dialog before delete data
-  const handleOpenDialog = (e, id) => {
-    e.preventDefault();
+  const handleOpenDialog = (id) => {
     setTargetId(id);
     setIsDialogOpen(true);
   };
@@ -53,24 +44,22 @@ function App() {
   };
 
   // CRUD handler
-  const handleSave = (e) => {
-    e.preventDefault();
+  const handleSave = (formData) => {
     const questionElem = {
       id: Date.now(),
-      question,
-      selectedOption,
-      answer,
+      question: formData.question,
+      selectedOption: formData.selectedOption,
+      answer: formData.answer,
     };
 
     setQuestionList((prev) => [...prev, questionElem]);
-
-    setAnswer("");
-    setQuestion("");
-    setSelectedOption(options[0]);
   };
 
   const handleEdit = (id) => {
-    console.log("edit");
+    if (id) {
+      const targetObj = questionList.find((obj) => obj.id === id);
+      console.log(targetObj);
+    }
   };
 
   const handleDelete = () => {
@@ -103,44 +92,7 @@ function App() {
         <span style={{ color: "gray" }}>Question list is empty</span>
       )}
 
-      <span>Input question</span>
-
-      <TextField
-        id="question"
-        label="Question"
-        value={question}
-        onChange={(e) => setQuestion(e.target.value)}
-        multiline
-        rows={4}
-        variant="filled"
-      />
-
-      <span>Respondent option</span>
-      <Select
-        value={selectedOption}
-        onChange={(e) => setSelectedOption(e.target.value)}
-      >
-        {options.map((opt, i) => (
-          <MenuItem value={opt} key={i}>
-            {opt}
-          </MenuItem>
-        ))}
-      </Select>
-
-      <span>Input answer</span>
-      <TextField
-        id="answer"
-        label="Answer"
-        value={answer}
-        onChange={(e) => setAnswer(e.target.value)}
-        multiline
-        rows={4}
-        variant="filled"
-      />
-
-      <Button onClick={(e) => handleSave(e)} variant="contained">
-        Save
-      </Button>
+      <QuestionForm onSubmit={handleSave} />
     </Stack>
   );
 }
