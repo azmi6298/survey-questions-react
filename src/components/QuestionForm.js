@@ -6,15 +6,27 @@ import Stack from "@mui/material/Stack";
 
 import { useState, useEffect } from "react";
 
-export default function QuestionForm({ onSubmit }) {
+export default function QuestionForm({ onSubmit, initialData }) {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
 
   const options = ["May Select", "Must Select"];
 
+  const setInitialData = () => {
+    setQuestion(initialData.question);
+    setSelectedOption(initialData.selectedOption);
+    setAnswer(initialData.answer);
+  };
+
   useEffect(() => {
     setSelectedOption(options[0]);
+
+    return () => {
+      if (initialData) {
+        setInitialData();
+      }
+    };
   }, []);
 
   const formData = () => {
@@ -27,7 +39,7 @@ export default function QuestionForm({ onSubmit }) {
 
   return (
     <Stack className="form" spacing={2}>
-      <span>Input question</span>
+      <span>{initialData ? "Edit" : "Input"} question</span>
 
       <TextField
         id="question"

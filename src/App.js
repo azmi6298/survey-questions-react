@@ -3,12 +3,14 @@ import { useState, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 
 import CardList from "./components/CardList";
-import AlertDelete from "./components/AlertDelete";
+import ModalDelete from "./components/ModalDelete";
+import ModalEdit from "./components/ModalEdit";
 import QuestionForm from "./components/QuestionForm";
 
 function App() {
   const [questionList, setQuestionList] = useState([]);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [modalType, setModalType] = useState(null);
+  const [isModalOpen, setisModalOpen] = useState(false);
   const [targetId, setTargetId] = useState(null);
 
   // initial render to set question list
@@ -17,7 +19,6 @@ function App() {
   };
 
   useEffect(() => {
-    // setSelectedOption(options[0]);
     const list = fetchQuestionList();
 
     return () => {
@@ -34,13 +35,14 @@ function App() {
   }, [stringifiedArr]);
 
   // handle dialog before delete data
-  const handleOpenDialog = (id) => {
+  const handleOpenModal = (modalType, id) => {
     setTargetId(id);
-    setIsDialogOpen(true);
+    setModalType(modalType);
+    setisModalOpen(true);
   };
 
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false);
+  const handleCloseModal = () => {
+    setisModalOpen(false);
   };
 
   // CRUD handler
@@ -55,9 +57,12 @@ function App() {
     setQuestionList((prev) => [...prev, questionElem]);
   };
 
-  const handleEdit = (id) => {
-    if (id) {
-      const targetObj = questionList.find((obj) => obj.id === id);
+  const handleEdit = () => {
+    console.log("====================================");
+    console.log("edit");
+    console.log("====================================");
+    if (targetId) {
+      const targetObj = questionList.find((obj) => obj.id === targetId);
       console.log(targetObj);
     }
   };
@@ -67,17 +72,31 @@ function App() {
       const listClone = [...questionList];
       const filteredList = listClone.filter((obj) => obj.id !== targetId);
       setQuestionList(filteredList);
-      setIsDialogOpen(false);
+      setisModalOpen(false);
     }
+  };
+
+  const isModalEdit = () => {
+    return modalType == "edit";
   };
 
   return (
     <Stack spacing={2} className="container">
-      <AlertDelete
-        isDialogOpen={isDialogOpen}
-        onCloseDialog={handleCloseDialog}
-        onDelete={handleDelete}
-      />
+      {isModalEdit() ? (
+        <ModalEdit
+          isModalOpen={isModalOpen}
+          onCloseModal={handleCloseModal}
+          onSave={handleEdit}
+          formData={questionList.find((obj) => obj.id === targetId)}
+        />
+      ) : (
+        <ModalDelete
+          isModalOpen={isModalOpen}
+          onCloseModal={handleCloseModal}
+          onDelete={handleDelete}
+          formData={questionList.find((obj) => obj.id === targetId)}
+        />
+      )}
 
       <span>Question list</span>
 
@@ -85,8 +104,7 @@ function App() {
         <CardList
           listData={questionList}
           onReorder={setQuestionList}
-          onEdit={handleEdit}
-          onDelete={handleOpenDialog}
+          onOpenModal={handleOpenModal}
         />
       ) : (
         <span style={{ color: "gray" }}>Question list is empty</span>

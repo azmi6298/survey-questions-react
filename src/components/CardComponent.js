@@ -2,7 +2,7 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
-export default function CardComponent({ cardData, onEdit, onDelete }) {
+export default function CardComponent({ cardData, onOpenModal }) {
   return (
     <Box
       sx={{
@@ -21,7 +21,7 @@ export default function CardComponent({ cardData, onEdit, onDelete }) {
         <span style={{ color: "gray" }}>Answer</span>
         <span>{cardData.answer}</span>
         <Button
-          onClick={() => onEdit(cardData.id)}
+          onClick={() => onOpenModal("edit", cardData.id)}
           size="small"
           variant="contained"
           color="warning"
@@ -29,7 +29,7 @@ export default function CardComponent({ cardData, onEdit, onDelete }) {
           Edit
         </Button>
         <Button
-          onClick={() => onDelete(cardData.id)}
+          onClick={() => onOpenModal("delete", cardData.id)}
           size="small"
           variant="contained"
           color="error"
