@@ -21,7 +21,7 @@ export default function CardComponent({ cardData, onEdit, onDelete }) {
         <span style={{ color: "gray" }}>Answer</span>
         <span>{cardData.answer}</span>
         <Button
-          onClick={onEdit(cardData.id)}
+          onClick={() => onEdit(cardData.id)}
           size="small"
           variant="contained"
           color="warning"
@@ -29,7 +29,7 @@ export default function CardComponent({ cardData, onEdit, onDelete }) {
           Edit
         </Button>
         <Button
-          onClick={onDelete(cardData.id)}
+          onClick={(e) => onDelete(e, cardData.id)}
           size="small"
           variant="contained"
           color="error"

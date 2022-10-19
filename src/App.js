@@ -2,10 +2,6 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogActions from "@mui/material/DialogActions";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
@@ -19,7 +15,7 @@ function App() {
   const [selectedOption, setSelectedOption] = useState("");
   const [questionList, setQuestionList] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [targetId, setTargetId] = useState(0);
+  const [targetId, setTargetId] = useState(null);
 
   const options = ["May Select", "Must Select"];
 
@@ -46,29 +42,14 @@ function App() {
   }, [stringifiedArr]);
 
   // handle dialog before delete data
-  const handleOpenDialog = (id) => {
-    console.log("dialog open " + id);
+  const handleOpenDialog = (e, id) => {
+    e.preventDefault();
     setTargetId(id);
     setIsDialogOpen(true);
   };
 
-  const AlertDeleteBox = () => {
-    return (
-      <Dialog
-        open={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        aria-labelledby="delete-dialog"
-      >
-        <DialogContent>
-          <DialogContentText>Are you sure want to delete?</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-
-          <Button onClick={() => handleDelete(targetId)}>Delete</Button>
-        </DialogActions>
-      </Dialog>
-    );
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
   };
 
   // CRUD handler
@@ -92,23 +73,22 @@ function App() {
     console.log("edit");
   };
 
-  const handleDelete = (id) => {
-    const listClone = [...questionList];
-    const filteredList = listClone.filter((obj) => obj.id !== id);
-    setQuestionList(filteredList);
-    setIsDialogOpen(false);
+  const handleDelete = () => {
+    if (targetId) {
+      const listClone = [...questionList];
+      const filteredList = listClone.filter((obj) => obj.id !== targetId);
+      setQuestionList(filteredList);
+      setIsDialogOpen(false);
+    }
   };
 
   return (
     <Stack spacing={2} style={{ padding: "4rem 8rem" }}>
-      <AlertDeleteBox />
-
-      {/* TODO fix alert delete */}
-      {/* <AlertDelete
+      <AlertDelete
         isDialogOpen={isDialogOpen}
-        onDialogOpen={setIsDialogOpen}
-        onDelete={handleDelete(targetId)}
-      /> */}
+        onCloseDialog={handleCloseDialog}
+        onDelete={handleDelete}
+      />
 
       <span>Question list</span>
 
