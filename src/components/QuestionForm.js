@@ -26,7 +26,7 @@ export default function QuestionForm({ onSubmit }) {
   };
 
   return (
-    <Stack style={{ maxWidth: "350px" }} spacing={2}>
+    <Stack className="form" spacing={2}>
       <span>Input question</span>
 
       <TextField

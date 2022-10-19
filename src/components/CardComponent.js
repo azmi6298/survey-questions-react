@@ -10,8 +10,8 @@ export default function CardComponent({ cardData, onEdit, onDelete }) {
         boxShadow: 1,
         borderRadius: 2,
         p: 2,
-        maxWidth: 300,
       }}
+      className="card"
     >
       <Stack spacing={2}>
         <span style={{ color: "gray" }}>Question</span>

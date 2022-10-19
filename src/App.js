@@ -72,7 +72,7 @@ function App() {
   };
 
   return (
-    <Stack spacing={2} style={{ padding: "4rem 8rem" }}>
+    <Stack spacing={2} className="container">
       <AlertDelete
         isDialogOpen={isDialogOpen}
         onCloseDialog={handleCloseDialog}
