@@ -10,6 +10,8 @@ export default function CardComponent({ cardData, onOpenModal }) {
         boxShadow: 1,
         borderRadius: 2,
         p: 2,
+        mb: 4,
+        cursor: "move",
       }}
       className="card"
     >

@@ -57,13 +57,22 @@ function App() {
     setQuestionList((prev) => [...prev, questionElem]);
   };
 
-  const handleEdit = () => {
-    console.log("====================================");
-    console.log("edit");
-    console.log("====================================");
+  const handleEdit = (formData) => {
     if (targetId) {
-      const targetObj = questionList.find((obj) => obj.id === targetId);
-      console.log(targetObj);
+      const updatedQuestionList = questionList.map((question) => {
+        if (question.id === targetId) {
+          return {
+            ...question,
+            question: formData.question,
+            selectedOption: formData.selectedOption,
+            answer: formData.answer,
+          };
+        }
+
+        return question;
+      });
+      setQuestionList(updatedQuestionList);
+      setisModalOpen(false);
     }
   };
 
@@ -77,7 +86,7 @@ function App() {
   };
 
   const isModalEdit = () => {
-    return modalType == "edit";
+    return modalType === "edit";
   };
 
   return (
@@ -86,19 +95,25 @@ function App() {
         <ModalEdit
           isModalOpen={isModalOpen}
           onCloseModal={handleCloseModal}
-          onSave={handleEdit}
-          formData={questionList.find((obj) => obj.id === targetId)}
+          onEdit={handleEdit}
+          formData={
+            targetId ? questionList.find((obj) => obj.id === targetId) : null
+          }
         />
       ) : (
         <ModalDelete
           isModalOpen={isModalOpen}
           onCloseModal={handleCloseModal}
           onDelete={handleDelete}
-          formData={questionList.find((obj) => obj.id === targetId)}
+          formData={
+            targetId ? questionList.find((obj) => obj.id === targetId) : null
+          }
         />
       )}
 
-      <span>Question list</span>
+      <span>
+        <b>Question list</b> (drag to reorder question)
+      </span>
 
       {questionList.length ? (
         <CardList

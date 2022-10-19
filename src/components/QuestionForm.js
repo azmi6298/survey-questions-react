@@ -6,7 +6,7 @@ import Stack from "@mui/material/Stack";
 
 import { useState, useEffect } from "react";
 
-export default function QuestionForm({ onSubmit, initialData }) {
+export default function QuestionForm({ onSubmit, initialData, onEdit }) {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
@@ -35,6 +35,18 @@ export default function QuestionForm({ onSubmit, initialData }) {
       selectedOption,
       answer,
     };
+  };
+
+  const handleSave = () => {
+    if (!initialData) {
+      onSubmit(formData());
+    } else {
+      onEdit(formData());
+    }
+
+    setQuestion("");
+    setSelectedOption(options[0]);
+    setAnswer("");
   };
 
   return (
@@ -74,8 +86,8 @@ export default function QuestionForm({ onSubmit, initialData }) {
         variant="filled"
       />
 
-      <Button onClick={() => onSubmit(formData())} variant="contained">
-        Save
+      <Button onClick={() => handleSave()} variant="contained">
+        {initialData ? "Update" : "Save"}
       </Button>
     </Stack>
   );
