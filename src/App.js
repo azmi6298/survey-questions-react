@@ -2,10 +2,10 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 
-import CardList from "./components/CardList";
-import ModalDelete from "./components/ModalDelete";
-import ModalEdit from "./components/ModalEdit";
-import QuestionForm from "./components/QuestionForm";
+import CardList from "./components/Card/CardList";
+import ModalDelete from "./components/Modal/ModalDelete";
+import ModalEdit from "./components/Modal/ModalEdit";
+import QuestionForm from "./components/Form/QuestionForm";
 
 function App() {
   const [questionList, setQuestionList] = useState([]);
