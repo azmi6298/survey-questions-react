@@ -51,7 +51,9 @@ export default function QuestionForm({ onSubmit, initialData, onEdit }) {
 
   return (
     <Stack className="form" spacing={2}>
-      <span>{initialData ? "Edit" : "Input"} question</span>
+      <span>
+        <b>{initialData ? "Edit" : "Input"} question</b>
+      </span>
 
       <TextField
         id="question"
@@ -63,7 +65,9 @@ export default function QuestionForm({ onSubmit, initialData, onEdit }) {
         variant="filled"
       />
 
-      <span>Respondent option</span>
+      <span>
+        <b>Respondent option</b>
+      </span>
       <Select
         value={selectedOption}
         onChange={(e) => setSelectedOption(e.target.value)}
@@ -75,7 +79,9 @@ export default function QuestionForm({ onSubmit, initialData, onEdit }) {
         ))}
       </Select>
 
-      <span>Input answer</span>
+      <span>
+        <b>Input answer</b>
+      </span>
       <TextField
         id="answer"
         label="Answer"

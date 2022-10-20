@@ -1,11 +1,12 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import Stack from "@mui/material/Stack";
+import Divider from "@mui/material/Divider";
 
-import CardList from "./components/CardList";
-import ModalDelete from "./components/ModalDelete";
-import ModalEdit from "./components/ModalEdit";
-import QuestionForm from "./components/QuestionForm";
+import CardList from "./components/Card/CardList";
+import ModalDelete from "./components/Modal/ModalDelete";
+import ModalEdit from "./components/Modal/ModalEdit";
+import QuestionForm from "./components/Form/QuestionForm";
 
 function App() {
   const [questionList, setQuestionList] = useState([]);
@@ -111,9 +112,7 @@ function App() {
         />
       )}
 
-      <span>
-        <b>Question list</b> (drag to reorder question)
-      </span>
+      <h1>Question list (drag to reorder question)</h1>
 
       {questionList.length ? (
         <CardList
@@ -125,6 +124,9 @@ function App() {
         <span style={{ color: "gray" }}>Question list is empty</span>
       )}
 
+      <Divider variant="middle"></Divider>
+
+      <h1>Question form</h1>
       <QuestionForm onSubmit={handleSave} />
     </Stack>
   );

@@ -1,4 +1,4 @@
-import QuestionForm from "./QuestionForm";
+import QuestionForm from "../Form/QuestionForm";
 import ModalComponent from "./ModalComponent";
 
 export default function ModalEdit({
