@@ -2,7 +2,7 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
-export default function CardComponent({ cardData, onOpenModal }) {
+export default function CardComponent({ cardData, onOpenModal, index }) {
   return (
     <Box
       sx={{
@@ -16,7 +16,7 @@ export default function CardComponent({ cardData, onOpenModal }) {
       className="card"
     >
       <Stack spacing={2}>
-        <span style={{ color: "gray" }}>Question</span>
+        <span style={{ color: "gray" }}>Question {index}</span>
         <span>{cardData.question}</span>
         <span style={{ color: "gray" }}>Respondent option</span>
         <span>{cardData.selectedOption}</span>
