@@ -38,12 +38,12 @@ export default function ModalComponent({
         <DialogContentText>{modalTitle}</DialogContentText>
         {modalContent}
       </DialogContent>
-      {!isEditModal ? (
+      {!isEditModal && (
         <DialogActions>
           <Button onClick={onCloseModal}>Cancel</Button>
           <Button onClick={onExecute}>{executeTitle}</Button>
         </DialogActions>
-      ) : null}
+      )}
     </Dialog>
   );
 }

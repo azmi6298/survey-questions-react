@@ -97,18 +97,14 @@ function App() {
           isModalOpen={isModalOpen}
           onCloseModal={handleCloseModal}
           onEdit={handleEdit}
-          formData={
-            targetId ? questionList.find((obj) => obj.id === targetId) : null
-          }
+          formData={targetId && questionList.find((obj) => obj.id === targetId)}
         />
       ) : (
         <ModalDelete
           isModalOpen={isModalOpen}
           onCloseModal={handleCloseModal}
           onDelete={handleDelete}
-          formData={
-            targetId ? questionList.find((obj) => obj.id === targetId) : null
-          }
+          formData={targetId && questionList.find((obj) => obj.id === targetId)}
         />
       )}
 
